@@ -5,7 +5,7 @@ class Question:
     def __init__(self, df, df_theme, name=None):
         self.name = name
         # Pick a random question from the theme
-        self.theme, self.ID, self.enonce, self.lien = pick_random_question(df, df_theme)
+        self.theme, self.ID, self.enonce, self.lien, self.boite = pick_random_question(df, df_theme)
 
 
 def pick_random_question(df, df_theme):
@@ -19,12 +19,13 @@ def pick_random_question(df, df_theme):
     l_q_weight = [1 / boite for boite in df_theme["boite"].to_list()]
     # get random id for theme according to weights
     random_id = random.choices(l_q_id, weights=l_q_weight)
-    # get ID, enonce and lien
+    # get ID, enonce, lien, boite
     Q_ID = random_id[0]
     enonce = df.loc[df["ID_question"] == Q_ID, 'enonce'].values[0]
     lien = df.loc[df["ID_question"] == Q_ID, 'lien'].values[0]
+    boite = df.loc[df["ID_question"] == Q_ID, 'boite'].values[0]
 
-    return theme, Q_ID, enonce, lien
+    return theme, Q_ID, enonce, lien, boite
 
 
 ############################

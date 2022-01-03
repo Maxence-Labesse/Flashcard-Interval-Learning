@@ -1,9 +1,21 @@
-import sqlite3
-import pandas as pd
-from app.import_files import df_questions, fichier_questions
+from handle_db_utils import *
+from app.import_data import df_questions, questions_db_path
+
+d_var_types_questions = {
+    'ID_question': 'INTEGER PRIMARY KEY AUTOINCREMENT',
+    'ID_theme': 'int',
+    'enonce': 'text',
+    'lien': 'text',
+    'boite': 'int'
+}
+
+d_var_types_themes = {
+    'ID_theme': 'INTEGER PRIMARY KEY AUTOINCREMENT',
+    'theme': 'text'
+}
 
 
-def update_db(df):
+def update_db(c, df):
     df_tmp = df.copy()
 
     # For each question in Questions file
@@ -16,15 +28,20 @@ def update_db(df):
 
             # if theme is not in themes table, add it with a new id_theme
             if res is None:
-                insert_in_db_table("themes", "(NULL, '{}')".format(row['Theme']))
+                theme_values = [row['Theme']]
+                theme_values_prepared = prepare_data_for_db_insert(theme_values, primary_key=True)
+                insert_in_db_table(c, "themes", theme_values_prepared)
+
+                # get new id_theme to add id to questions table
                 c.execute("SELECT ID_theme from themes where theme='{}'".format(row['Theme']))
                 res = c.fetchone()
                 print("'{}' new theme has been added with id_theme {}".format(row['Theme'], res[0]))
+
             # Now theme exists in themes table, add question in questions table, and set boite to 1
             theme_id = res[0]
-
-            insert_in_db_table("questions",
-                               '(NULL, "{}", "{}", "{}", "{}")'.format(theme_id, row['Enonce'], row["Lien"], 1))
+            question_values = [theme_id, row['Enonce'], row["Lien"], 1]
+            question_values_prepared = prepare_data_for_db_insert(question_values, primary_key=True)
+            insert_in_db_table(c, "questions", question_values_prepared)
 
             # set 'DB' as 'OK
             df_tmp.loc[index, 'Db'] = 'OK'
@@ -34,60 +51,13 @@ def update_db(df):
     return df_tmp
 
 
-def insert_in_db_table(table_name, values):
-    """
-    Inster many values:
-    https://youtu.be/byHcYRpMgI4?t=1887
-    """
-    c.execute("INSERT INTO {} VALUES {}".format(table_name, values))
-    conn.commit()
-
-
-def db_table_to_dataframe(table_name, keep_rowid=False):
-    if keep_rowid:
-        df = pd.read_sql_query("SELECT rowid, * from {}".format(table_name), conn)
-    else:
-        df = pd.read_sql_query("SELECT * from {}".format(table_name), conn)
-    return df
-
-
-def delete_from_db_table(table_name, rowid):
-    c.execute("DELETE from {} where rowid={}".format(table_name, str(rowid)))
-
-
-def create_tables():
-    c.execute("DROP TABLE questions")
-    c.execute("DROP TABLE themes")
-
-    c.execute("""CREATE TABLE themes (
-            ID_theme INTEGER PRIMARY KEY AUTOINCREMENT,
-            theme text
-    )""")
-
-    c.execute("""CREATE TABLE questions (
-            ID_question INTEGER PRIMARY KEY AUTOINCREMENT,
-            ID_theme Integer,
-            enonce text,
-            lien text,
-            boite Integer
-    )""")
-
-
-####################################################
-
-conn = sqlite3.connect('../data/questions.db')
+conn = sqlite3.connect(questions_db_path)
 c = conn.cursor()
-
-# create_tables()
-
-df_filled = update_db(df_questions)
-
-print(df_filled)
-print(pd.read_sql_query("SELECT ID_theme, theme from themes", conn))
-print(pd.read_sql_query("SELECT * from questions", conn))
-
-df_filled.to_excel(fichier_questions, index=False)
-
+create_table_in_db(c, "themes", d_var_types_themes, drop=True)
+create_table_in_db(c, "questions", d_var_types_questions, drop=True)
+update_db(c, df_questions)
+display_db_table(conn, "themes")
+display_db_table(conn, "questions")
+display_db_table(conn, "job_done_dates")
 conn.commit()
-
 conn.close()

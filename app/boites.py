@@ -1,25 +1,24 @@
-from import_files import fichier_boite
+from import_data import dir_path
+import sqlite3
 
 
-def avancer_boite(df, q_id):
-    df_tmp = df.copy()
-    id_boite = df_tmp.loc[df["ID"] == q_id, "boite"].values[0]
+def avancer_boite(boite):
+    if boite < 4:
+        boite += 1
 
-    if id_boite < 4:
-        df_tmp.loc[df["ID"] == q_id, "boite"] += 1
-
-    return df_tmp
+    return boite
 
 
-def reculer_boite(df, q_id):
-    df_tmp = df.copy()
-    id_boite = df_tmp.loc[df["ID"] == q_id, "boite"].values[0]
+def reculer_boite(boite):
+    if boite > 0:
+        boite -= 1
 
-    if id_boite > 0:
-        df_tmp.loc[df["ID"] == q_id, "boite"] -= 1
-
-    return df_tmp
+    return boite
 
 
-def save_boite(df_boite):
-    df_boite.to_csv(fichier_boite, index=False)
+def update_boite(id_question, boite):
+    conn = sqlite3.connect(dir_path + '\..\data\questions.db')
+    c = conn.cursor()
+    c.execute("""UPDATE questions SET boite={} WHERE ID_question= {}""".format(boite, id_question))
+    conn.commit()
+    conn.close()

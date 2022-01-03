@@ -1,5 +1,7 @@
 from question_class import Question
 import pandas as pd
+import sqlite3
+from datetime import datetime, timedelta
 
 # For tests
 data = {
@@ -30,4 +32,33 @@ def test_questions():
     print(l_.count(3) / 10000)
 
 
-test_questions()
+# test_questions()
+conn = sqlite3.connect('../data/questions.db')
+c = conn.cursor()
+
+today_date = datetime.today()
+yesterday_date = today_date - timedelta(days=1)
+
+today_date_str = today_date.strftime('%Y-%m-%d')
+yesterday_date_str = yesterday_date.strftime('%Y-%m-%d')
+
+c.execute("DROP TABLE job_done_dates")
+c.execute("""CREATE TABLE job_done_dates (date text)""")
+c.execute("INSERT INTO job_done_dates VALUES ('" + today_date_str + "')")
+c.execute("SELECT max(date) from job_done_dates")
+conn.commit()
+res = c.fetchall()
+
+max_date = datetime.strptime(res[0][0], '%Y-%m-%d')
+print(type(max_date))
+print(type(yesterday_date))
+print(type(today_date))
+print("Max date: {}".format(max_date))
+print("Yesterday date: {}".format(yesterday_date))
+print("Today date: {}".format(today_date))
+print("Max date < today: {}".format(max_date < today_date))
+print("Max date = today: {}".format(max_date == today_date))
+print("Max date > yesterday: {}".format(max_date > yesterday_date))
+print("Max date = yesterday: {}".format(max_date == yesterday_date))
+
+conn.close()
