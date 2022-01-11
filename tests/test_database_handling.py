@@ -18,7 +18,7 @@ d_var_table_2 = {
 }
 
 # We create table_1 in the database using db_conn
-db_conn(path_database, create_table_in_db, table_name="table_1", d_var_types=d_var_table_1, drop=True)
+db_conn(path_database, create_table_in_db, table_name="table_1", d_var_types=d_var_table_1, drop=False)
 
 # open connexion
 conn = sqlite3.connect(path_database)
@@ -29,7 +29,7 @@ c.execute("""SELECT name FROM sqlite_master WHERE type='table' AND name='table_1
 test_table_1_exist = c.fetchone()
 
 # We create table_2 in the database
-create_table_in_db(conn, "table_2", d_var_table_2, drop=True)
+create_table_in_db(conn, "table_2", d_var_table_2, drop=False)
 c.execute("""SELECT name FROM sqlite_master WHERE type='table' AND name='table_2'""")
 test_table_2_exist = c.fetchone()
 
@@ -49,6 +49,7 @@ test_delete_values_1 = c.fetchone()
 
 # We import table 2 in a dataframe
 df_table_2 = db_table_to_dataframe(conn, ['table_2'])
+d_table_2_infos = get_db_table_infos(conn, 'table_2')
 
 # drop tables
 c.execute("""DROP TABLE 'table_1'""")
@@ -71,6 +72,10 @@ class TestDatabaseHandling(unittest.TestCase):
 
     def test_delete_from_db_table(self):
         self.assertIsNone(test_delete_values_1)
+
+    def test_get_db_table_infos(self):
+        self.assertEqual(d_table_2_infos['nrows'], 1)
+        self.assertEqual(d_table_2_infos['columns'], ['var_1', 'var_2'])
 
     def test_db_table_to_dataframe(self):
         self.assertEqual(df_table_2[0].shape, (1, 2))

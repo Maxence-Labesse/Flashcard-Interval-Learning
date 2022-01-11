@@ -10,8 +10,8 @@ insert_in_db_table
     insert values in a database table
 delete_from_db_table
     delete row from database table
-display_db_table
-    display table as DataFrame
+get_db_table_infos
+    display database table infos (nrows and column names)
 db_table_to_dataframe
     import database table in a DataFrame
 
@@ -119,8 +119,8 @@ def delete_from_db_table(conn, table_name, rowid):
     c.execute("DELETE from {} where rowid={}".format(table_name, str(rowid)))
 
 
-def display_db_table(conn, table_name):
-    """display a database table as a dataframe
+def get_db_table_infos(conn, table_name):
+    """get row_number and columns table of a database table
 
     Parameters
     ----------
@@ -128,8 +128,16 @@ def display_db_table(conn, table_name):
         connexion to a sqlite3 database
     table_name: str
         table name
+
+    Returns
+    -------
+    dict:
+        dictionnary containing table row numbers and columns
+        {"nrows": val, "columns": val
     """
-    print(pd.read_sql_query("SELECT * from {}".format(table_name), conn))
+    df = pd.read_sql_query("SELECT * from {}".format(table_name), conn)
+
+    return {"nrows": df.shape[0], "columns": df.columns.tolist()}
 
 
 def db_table_to_dataframe(conn, l_table_names):

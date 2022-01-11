@@ -101,7 +101,7 @@ class Question:
 
         """
         c = conn.cursor()
-        c.execute("""UPDATE utils SET box={} WHERE ID_question= {}""".format(self.box, self.ID))
+        c.execute("""UPDATE questions SET box={} WHERE ID_question= {}""".format(self.box, self.ID))
 
 
 #############
