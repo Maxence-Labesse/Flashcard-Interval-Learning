@@ -1,7 +1,8 @@
 # Interval Learning Flashcards
 ![Demo](demo.gif)
 
-> A Python application that asks you 2 random questions per day.
+> A Python application for [space repetition](https://en.wikipedia.org/wiki/Spaced_repetition)
+> that asks you 2 random questions per day
 > 
 > Based on the Leitner system, newly introduced and more difficult questions are shown more frequently,
 > while older and less difficult ones are shown less frequently in 
@@ -10,11 +11,33 @@
 ## Installation (Windows)
 git clone the project
 
-## Usage example
-### Get started
-For the first time you will use this app, you need to 
+## Setings
+Before using the app, you have to create the database and feed it with your questions
+#### 1. create database
+Using terminal (at project root):
+```shell
+mkdir data
+py -m flashcards.update_database create
+```
+#### 2. feed database with questions
+* First, you have to fill your questions in an Excel file, with this structure:
+![Excel_structure](XL_structure.PNG)
+/!\ 'Imported' column has to be empty.
+After the import, the program will fill the cell with "OK".
 
+* Then, using terminal (at project root):
+```shell
+py -m flashcards.update_database update *Excel_file.xlsx*
 
+```
+Note: If you need to import new questions in the database, just add it to
+the Excel file and execute the same command.
+
+## Usage
+IMO, the best way to use this app is to use the 
+Windows [Task Scheduler](https://www.windowscentral.com/how-create-automated-task-using-task-scheduler-windows-10),
+with a daily trigger, and action like:
+![Action](TaskSchedulerAction.PNG)
 
 ## Release History
 * 0.0.1
