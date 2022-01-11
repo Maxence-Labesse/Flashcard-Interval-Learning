@@ -34,9 +34,8 @@ Note: If you need to import new questions in the database, just add it to
 the Excel file and execute the same command.
 
 ## Usage
-IMO, the best way to use this app is to use the 
-Windows [Task Scheduler](https://www.windowscentral.com/how-create-automated-task-using-task-scheduler-windows-10),
-with a daily trigger, and action like:
+A good to use this app is to set a daily task on Windows with[Task Scheduler](https://www.windowscentral.com/how-create-automated-task-using-task-scheduler-windows-10),
+with action like: 
 ![Action](TaskSchedulerAction.PNG)
 
 ## Release History
