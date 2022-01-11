@@ -1,3 +1,5 @@
-/venv
-/data
+/data/questions.db
+/data/questions2.xlsx
+/data/questions.xlsx
+/venv/
 

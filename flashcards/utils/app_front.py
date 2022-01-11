@@ -49,7 +49,7 @@ def open_app(q1, q2, today_job_done):
     """
     # Creating main window
     root = Tk()
-    root.title("2 Questions A Day")
+    root.title("Daily questions")
     style = ttk.Style()
     style.theme_use('clam')
 
@@ -95,12 +95,12 @@ def show_question(root, question):
 
     # display question topic and label
     txt_topic = "Topic: {}".format(question.topic)
-    txt_label = "Label: {}".format(question.label)
+    txt_label = question.label
     width_label = max([len(x) for x in [txt_topic, txt_label]])
     topic_label = Label(top, text=txt_topic, anchor="w", width=width_label)
-    topic_label.grid(row=0, column=0, columnspan=4, pady=10, padx=10)
+    topic_label.grid(row=0, column=0, columnspan=3, pady=10, padx=0)
     label_label = Label(top, text=txt_label, anchor="w", width=width_label)
-    label_label.grid(row=1, column=0, columnspan=4, pady=10, padx=10)
+    label_label.grid(row=1, column=0, columnspan=3, pady=10, padx=0)
 
     # link button (for answer web page)
     lien = ttk.Button(top, text="Link", command=lambda: webbrowser.open_new(url=question.link))
