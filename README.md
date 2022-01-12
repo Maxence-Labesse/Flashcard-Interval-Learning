@@ -38,10 +38,23 @@ Note: If you need to import new questions in the database, just add it to
 the Excel file and execute the same command.
 
 ## Usage
+Using terminal (at project root):
+```shell
+py -m flashcards.runner
+```
+### How to run the software
+
+
+### Daily usage
 A good to use this app is to set a daily task on Windows with[Task Scheduler](https://www.windowscentral.com/how-create-automated-task-using-task-scheduler-windows-10),
 with action like: 
 ![Action](images/TaskSchedulerAction.PNG)
 
+### How to run tests
+Using terminal (at project root):
+```shell
+py -m unittest tests.test_date_utils
+```
 ## Release History
 * 0.0.1
     * First realease
