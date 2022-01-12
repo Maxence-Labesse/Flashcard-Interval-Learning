@@ -1,4 +1,4 @@
-""" This module provided function to build the software interface
+""" This module provides functions to build the software interface
 
 function
 --------
@@ -165,3 +165,4 @@ def close_question(root, question, right_answer):
             q2_button.grid(row=1, column=3, pady=10)
 
         first_question_done = True
+
