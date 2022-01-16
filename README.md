@@ -63,4 +63,4 @@ LABESSE Maxence - maxence.labesse@yahoo.fr
 
 Distributed under the MIT license. See ``LICENSE`` for more information.
 
-[https://github.com/Maxence-Labesse/Flashcard-Interval-Learning]()
+[https://github.com/Maxence-Labesse/Flashcard-Interval-Learning](https://github.com/Maxence-Labesse/Flashcard-Interval-Learning)

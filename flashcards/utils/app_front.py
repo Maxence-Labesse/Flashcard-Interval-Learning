@@ -24,9 +24,9 @@ first_question_done = False
 
 
 def open_app(q1, q2, today_job_done):
-    """build software interface
+    """build app interface
 
-    This windows containg the date of the current day,
+    This windows contains the date of the current day,
     and 1 button to open each question
 
     If the questions have already been answered this day, the interface
